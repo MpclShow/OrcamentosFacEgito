@@ -197,7 +197,7 @@ input[type="number"]{
 
 <div class="total">Total: <span id="total" class="valor"></span></div>
 <div class="total">Vendedor: <span id="vendedor"></span></div>
-<div class="total">Empresa: <span id="empresa"></span></div>
+<div class="total">Facção: <span id="empresa"></span></div>
 
 <button onclick="copiar()">Copiar</button>
 <button onclick="limpar()">Limpar</button>
@@ -213,14 +213,15 @@ let intervalo=null;
 
 const produtos={
 "Armas":[
-{nome:"FIVE",parceria:273.35,normal:303.75},
-{nome:"G-36",parceria:405,normal:450},
-{nome:"Uzi",parceria:266.60,normal:296.25},
-{nome:"Doze",parceria:327.35,normal:363.75}
+{nome:"Five",parceria:116910,normal:129900},
+{nome:"Micro Uzi",parceria:93285,normal:103650},
+{nome:"AK - 47",parceria:258120,normal:286800},
+{nome:"Remington",parceria:190890,normal:212100},
+{nome:"G3",parceria:322650,normal:358500},
+{nome:"M tar",parceria:218160,normal:242400},
 ],
-"Extras":[
-{nome:"Munição",parceria:50,normal:70},
-{nome:"Colete",parceria:120,normal:150}
+"Entorpecentes":[
+{nome:"LSD",parceria:600,normal:700}
 ]
 };
 
@@ -297,7 +298,7 @@ const valor=qtd*p[modo];
 
 total+=valor;
 
-resumoHTML+=`<div><span>${p.nome} x${qtd}</span><span>${formatar(valor)}</span></div>`;
+resumoHTML+=`<div><span>${p.nome}   -  x${qtd}</span><span>${formatar(valor)}</span></div>`;
 }else{
 delete selecionados[id];
 }
