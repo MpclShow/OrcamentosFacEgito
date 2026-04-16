@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EGITO</title>
+
+<style>
+*{
+    -webkit-tap-highlight-color: transparent;
+}
+
+body{
+    background:#40404d;
+    color:white;
+    font-family:Segoe UI;
+    padding:15px;
+}
+
+h1{text-align:center;}
+
+.container{
+    display:flex;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.itens{
+    flex:3;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:15px;
+}
+
+.categoria{
+    background:#323c5a;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 0 10px #164af5;
+}
+
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:#00025a;
+    padding:10px;
+    margin:5px 0;
+    border-radius:8px;
+    transition: all 0.2s ease;
+}
+
+.item:hover{
+    transform: scale(1.02);
+}
+
+.calculadora{
+    flex:1;
+    background:#323c5a;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 0 10px #164af5;
+    position:sticky;
+    top:10px;
+}
+
+.status{
+    text-align:center;
+    padding:10px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+
+.parceria{background:#004050;color:#00ffff;}
+.normal{background:#500000;color:#ff2c2c;}
+
+button{
+    padding:10px;
+    border:none;
+    border-radius:6px;
+    background:#164af5;
+    color:white;
+    cursor:pointer;
+    font-size:16px;
+}
+
+button:active{
+    transform:scale(0.9);
+    box-shadow:0 0 10px #00ffff;
+}
+
+.qtd-box{
+    display:flex;
+    align-items:center;
+    gap:5px;
+}
+
+input[type="number"]{
+    width:60px;
+    height:40px;
+    text-align:center;
+    background:#000;
+    border:1px solid #164af5;
+    color:white;
+    border-radius:5px;
+    font-size:16px;
+}
+
+.flash{
+    animation:flash 0.3s;
+}
+
+@keyframes flash{
+    0%{background:#00ffff;}
+    100%{background:transparent;}
+}
+
+.resumo{
+    background:#00025a;
+    padding:10px;
+    margin-top:10px;
+    border-radius:5px;
+}
+
+.resumo div{
+    display:flex;
+    justify-content:space-between;
+    font-size:14px;
+}
+
+.total{
+    text-align:center;
+    margin-top:10px;
+    font-size:1.2rem;
+}
+
+.valor{color:#40ad00;}
+
+@media (max-width:768px){
+
+.container{
+    flex-direction:column;
+}
+
+.itens{
+    grid-template-columns:1fr;
+}
+
+.calculadora{
+    position:static;
+}
+
+.item{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:10px;
+}
+
+.qtd-box{
+    width:100%;
+    justify-content:space-between;
+}
+
+.item button{
+    width:50px;
+    height:50px;
+    font-size:18px;
+}
+
+input[type="number"]{
+    width:80px;
+    height:50px;
+    font-size:18px;
+}
+
+}
+</style>
+</head>
+
+<body>
+
+<h1>EGITO</h1>
+
+<div class="container">
+
+<div class="itens" id="itens"></div>
+
+<div class="calculadora">
+
+<div id="statusModo" class="status normal">🔴 NORMAL</div>
+
+<label>
+<input type="checkbox" id="modoCheck" onchange="toggleModo()"> Parceria
+</label>
+
+<div class="resumo" id="resumo"></div>
+
+<div class="total">Total: <span id="total" class="valor"></span></div>
+<div class="total">Vendedor: <span id="vendedor"></span></div>
+<div class="total">Empresa: <span id="empresa"></span></div>
+
+<button onclick="copiar()">Copiar</button>
+<button onclick="limpar()">Limpar</button>
+
+</div>
+
+</div>
+
+<script>
+let modo="normal";
+let selecionados={};
+let intervalo=null;
+
+const produtos={
+"Armas":[
+{nome:"FIVE",parceria:273.35,normal:303.75},
+{nome:"G-36",parceria:405,normal:450},
+{nome:"Uzi",parceria:266.60,normal:296.25},
+{nome:"Doze",parceria:327.35,normal:363.75}
+],
+"Extras":[
+{nome:"Munição",parceria:50,normal:70},
+{nome:"Colete",parceria:120,normal:150}
+]
+};
+
+// 🔥 MAPA OTIMIZADO
+const mapaProdutos = {};
+for(let cat in produtos){
+  produtos[cat].forEach((p,i)=>{
+    mapaProdutos[cat+i] = p;
+  });
+}
+
+function render(){
+const c=document.getElementById("itens");
+c.innerHTML="";
+
+for(let cat in produtos){
+let html=`<div class="categoria"><h3>${cat}</h3>`;
+
+produtos[cat].forEach((p,i)=>{
+const id=cat+i;
+const qtd=selecionados[id] || 0;
+
+html+=`
+<div class="item" id="box-${id}">
+<span>${p.nome} - ${formatar(p[modo])}</span>
+
+<div class="qtd-box">
+<button onmousedown="segurar('${id}')" ontouchstart="segurar('${id}')">+</button>
+<button onclick="aumentar10('${id}')">+10</button>
+<input type="number" min="0" value="${qtd}" id="${id}" oninput="calcular()">
+<button onmousedown="segurarDiminuir('${id}')" ontouchstart="segurarDiminuir('${id}')">-</button>
+<button onclick="zerar('${id}')">0</button>
+</div>
+
+</div>
+`;
+});
+
+html+="</div>";
+c.innerHTML+=html;
+}
+
+calcular();
+}
+
+function toggleModo(){
+modo=document.getElementById("modoCheck").checked?"parceria":"normal";
+
+const s=document.getElementById("statusModo");
+
+if(modo==="parceria"){
+s.className="status parceria";
+s.innerText="🟢 PARCERIA";
+}else{
+s.className="status normal";
+s.innerText="🔴 NORMAL";
+}
+
+render();
+}
+
+function calcular(){
+let total=0;
+let resumoHTML="";
+
+for(let id in mapaProdutos){
+const el=document.getElementById(id);
+const qtd = Number(el?.value)||0;
+
+if(qtd>0){
+selecionados[id]=qtd;
+const p = mapaProdutos[id];
+const valor=qtd*p[modo];
+
+total+=valor;
+
+resumoHTML+=`<div><span>${p.nome} x${qtd}</span><span>${formatar(valor)}</span></div>`;
+}else{
+delete selecionados[id];
+}
+}
+
+document.getElementById("resumo").innerHTML=resumoHTML||"Nenhum item";
+document.getElementById("total").innerText=formatar(total);
+document.getElementById("vendedor").innerText=formatar(total*0.3);
+document.getElementById("empresa").innerText=formatar(total*0.7);
+
+salvar();
+}
+
+function aumentar(id){
+const input=document.getElementById(id);
+input.value=(Number(input.value)||0)+1;
+efeito(id);
+calcular();
+}
+
+function diminuir(id){
+const input=document.getElementById(id);
+let v=(Number(input.value)||0)-1;
+if(v<0)v=0;
+input.value=v;
+efeito(id);
+calcular();
+}
+
+function aumentar10(id){
+const input=document.getElementById(id);
+input.value=(Number(input.value)||0)+10;
+efeito(id);
+calcular();
+}
+
+function zerar(id){
+const input=document.getElementById(id);
+input.value=0;
+calcular();
+}
+
+function segurar(id){
+parar();
+intervalo=setInterval(()=>aumentar(id),120);
+}
+
+function segurarDiminuir(id){
+parar();
+intervalo=setInterval(()=>diminuir(id),120);
+}
+
+function parar(){
+clearInterval(intervalo);
+}
+
+document.addEventListener("mouseup", parar);
+document.addEventListener("mouseleave", parar);
+document.addEventListener("touchend", parar);
+
+function efeito(id){
+const box=document.getElementById("box-"+id);
+box.classList.add("flash");
+setTimeout(()=>box.classList.remove("flash"),300);
+}
+
+function copiar(){
+let texto="ORÇAMENTO EGITO\n\n";
+
+for(let id in selecionados){
+const p = mapaProdutos[id];
+const qtd = selecionados[id];
+const valor = qtd*p[modo];
+
+texto += `${p.nome} x${qtd} - ${formatar(valor)}\n`;
+}
+
+texto += `\n====================\n`;
+texto += `Total: ${document.getElementById("total").innerText}\n`;
+texto += `Vendedor: ${document.getElementById("vendedor").innerText}\n`;
+texto += `Empresa: ${document.getElementById("empresa").innerText}\n`;
+
+navigator.clipboard.writeText(texto);
+alert("Copiado!");
+}
+
+function limpar(){
+selecionados={};
+render();
+}
+
+function formatar(v){
+return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+}
+
+function salvar(){
+localStorage.setItem("modo",modo);
+localStorage.setItem("dados",JSON.stringify(selecionados));
+}
+
+function carregar(){
+modo=localStorage.getItem("modo")||"normal";
+selecionados=JSON.parse(localStorage.getItem("dados"))||{};
+}
+
+window.onload=()=>{
+carregar();
+document.getElementById("modoCheck").checked=modo==="parceria";
+toggleModo();
+};
+</script>
+
+</body>
+</html>
