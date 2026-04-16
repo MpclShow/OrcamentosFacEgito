@@ -17,6 +17,15 @@ body{
     padding:15px;
 }
 
+.orcamento {
+    font-family: monospace;
+    white-space: pre;
+    background: #0b1a6e;
+    color: white;
+    padding: 15px;
+    border-radius: 8px;
+}
+
 h1{text-align:center;}
 
 .container{
@@ -123,9 +132,19 @@ input[type="number"]{
 }
 
 .resumo div{
-    display:flex;
-    justify-content:space-between;
+    display:grid;
+    grid-template-columns: 1fr 80px 150px;
     font-size:14px;
+    gap:10px;
+    align-items:center;
+}
+
+.resumo div span:nth-child(2){
+    text-align:center;
+}
+
+.resumo div span:nth-child(3){
+    text-align:right;
 }
 
 .total{
@@ -197,7 +216,7 @@ input[type="number"]{
 
 <div class="total">Total: <span id="total" class="valor"></span></div>
 <div class="total">Vendedor: <span id="vendedor"></span></div>
-<div class="total">Facção: <span id="empresa"></span></div>
+<div class="total">FAC: <span id="empresa"></span></div>
 
 <button onclick="copiar()">Copiar</button>
 <button onclick="limpar()">Limpar</button>
@@ -213,12 +232,12 @@ let intervalo=null;
 
 const produtos={
 "Armas":[
-{nome:"Five",parceria:116910,normal:129900},
+{nome:"Five 7",parceria:116910,normal:129900},
 {nome:"Micro Uzi",parceria:93285,normal:103650},
-{nome:"AK - 47",parceria:258120,normal:286800},
+{nome:"AK-47",parceria:258120,normal:286800},
 {nome:"Remington",parceria:190890,normal:212100},
-{nome:"G3",parceria:322650,normal:358500},
-{nome:"M tar",parceria:218160,normal:242400},
+{nome:"G3-MK2",parceria:322650,normal:358500},
+{nome:"M-tar 21",parceria:218160,normal:242400},
 ],
 "Entorpecentes":[
 {nome:"LSD",parceria:600,normal:700}
@@ -298,7 +317,7 @@ const valor=qtd*p[modo];
 
 total+=valor;
 
-resumoHTML+=`<div><span>${p.nome}   -  x${qtd}</span><span>${formatar(valor)}</span></div>`;
+resumoHTML+=`<div><span>${p.nome}</span><span>x${qtd}</span><span>${formatar(valor)}</span></div>`;
 }else{
 delete selecionados[id];
 }
@@ -373,13 +392,13 @@ const p = mapaProdutos[id];
 const qtd = selecionados[id];
 const valor = qtd*p[modo];
 
-texto += `${p.nome} x${qtd} - ${formatar(valor)}\n`;
+texto += `${p.nome} - x ${qtd} = ${formatar(valor)}\n`;
 }
 
 texto += `\n====================\n`;
 texto += `Total: ${document.getElementById("total").innerText}\n`;
 texto += `Vendedor: ${document.getElementById("vendedor").innerText}\n`;
-texto += `Empresa: ${document.getElementById("empresa").innerText}\n`;
+texto += `FAC: ${document.getElementById("empresa").innerText}\n`;
 
 navigator.clipboard.writeText(texto);
 alert("Copiado!");
