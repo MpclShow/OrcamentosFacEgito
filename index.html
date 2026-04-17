@@ -225,10 +225,13 @@ input[type="number"]{
 
 </div>
 
+
 <script>
 let modo="normal";
 let selecionados={};
-let intervalo=null;
+
+let intervalo = null;
+let segurando = false;
 
 const produtos={
 "Armas":[
@@ -244,7 +247,7 @@ const produtos={
 ]
 };
 
-// 🔥 MAPA OTIMIZADO
+// MAPA
 const mapaProdutos = {};
 for(let cat in produtos){
   produtos[cat].forEach((p,i)=>{
@@ -268,13 +271,32 @@ html+=`
 <span>${p.nome} - ${formatar(p[modo])}</span>
 
 <div class="qtd-box">
-<button onmousedown="segurar('${id}')" ontouchstart="segurar('${id}')">+</button>
-<button onclick="aumentar10('${id}')">+10</button>
-<input type="number" min="0" value="${qtd}" id="${id}" oninput="calcular()">
-<button onmousedown="segurarDiminuir('${id}')" ontouchstart="segurarDiminuir('${id}')">-</button>
-<button onclick="zerar('${id}')">0</button>
-</div>
 
+<button 
+onmousedown="startPress('${id}','mais')" 
+ontouchstart="startPress('${id}','mais')"
+onmouseup="stopPress()" 
+onmouseleave="stopPress()" 
+ontouchend="stopPress()">
++
+</button>
+
+<button onclick="aumentar10('${id}')">+10</button>
+
+<input type="number" min="0" value="${qtd}" id="${id}" oninput="calcular()">
+
+<button 
+onmousedown="startPress('${id}','menos')" 
+ontouchstart="startPress('${id}','menos')"
+onmouseup="stopPress()" 
+onmouseleave="stopPress()" 
+ontouchend="stopPress()">
+-
+</button>
+
+<button onclick="zerar('${id}')">0</button>
+
+</div>
 </div>
 `;
 });
@@ -284,6 +306,32 @@ c.innerHTML+=html;
 }
 
 calcular();
+}
+
+function startPress(id, tipo) {
+  if (segurando) return;
+
+  segurando = true;
+
+  executarAcao(id, tipo);
+
+  intervalo = setInterval(() => {
+    executarAcao(id, tipo);
+  }, 120);
+}
+
+function stopPress() {
+  segurando = false;
+  clearInterval(intervalo);
+  intervalo = null;
+}
+
+function executarAcao(id, tipo) {
+  if (tipo === "mais") {
+    aumentar(id);
+  } else {
+    diminuir(id);
+  }
 }
 
 function toggleModo(){
@@ -360,24 +408,6 @@ input.value=0;
 calcular();
 }
 
-function segurar(id){
-parar();
-intervalo=setInterval(()=>aumentar(id),120);
-}
-
-function segurarDiminuir(id){
-parar();
-intervalo=setInterval(()=>diminuir(id),120);
-}
-
-function parar(){
-clearInterval(intervalo);
-}
-
-document.addEventListener("mouseup", parar);
-document.addEventListener("mouseleave", parar);
-document.addEventListener("touchend", parar);
-
 function efeito(id){
 const box=document.getElementById("box-"+id);
 box.classList.add("flash");
@@ -423,11 +453,18 @@ modo=localStorage.getItem("modo")||"normal";
 selecionados=JSON.parse(localStorage.getItem("dados"))||{};
 }
 
+window.addEventListener("beforeunload", () => {
+  localStorage.removeItem("dados");
+  localStorage.removeItem("modo");
+});
+
 window.onload=()=>{
 carregar();
 document.getElementById("modoCheck").checked=modo==="parceria";
 toggleModo();
 };
+
+
 </script>
 
 </body>
