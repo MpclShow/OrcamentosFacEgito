@@ -9,18 +9,21 @@
 :root {
     --primary: #164af5;
     --secondary: #00ffff;
-    --bg-dark: #121217;
-    --bg-card: #1e1e26;
-    --bg-item: #0a0a0f;
+    --bg-dark: #1a1a24;
+    --bg-card: #252533;
+    --bg-item: #0f1123;
     --text: #ffffff;
 }
 
-*{ box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+*{
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+}
 
 body{
-    background: radial-gradient(circle at top, #1c1c2b, var(--bg-dark));
+    background: radial-gradient(circle at top, #2b2b3a, #121217);
     color: var(--text);
-    font-family: 'Segoe UI', system-ui, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
     margin: 0;
     min-height: 100vh;
@@ -28,9 +31,9 @@ body{
 
 h1{
     text-align: center;
-    letter-spacing: 3px;
+    letter-spacing: 5px;
     text-shadow: 0 0 15px var(--primary);
-    margin-bottom: 20px;
+    margin-bottom: 30px;
 }
 
 .container{
@@ -43,16 +46,16 @@ h1{
 .itens{
     flex: 2;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
 .categoria{
     background: var(--bg-card);
-    padding: 15px;
+    padding: 20px;
     border-radius: 12px;
-    border: 1px solid #2d2d3d;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    border: 1px solid #3d3d52;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
 }
 
 .categoria h3 {
@@ -60,7 +63,6 @@ h1{
     border-left: 4px solid var(--primary);
     padding-left: 10px;
     color: var(--secondary);
-    font-size: 1rem;
 }
 
 .item{
@@ -72,6 +74,12 @@ h1{
     margin: 8px 0;
     border-radius: 8px;
     border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.item:hover{
+    border-color: var(--primary);
+    transform: translateY(-2px);
 }
 
 .calculadora{
@@ -82,95 +90,98 @@ h1{
     position: sticky;
     top: 20px;
     height: fit-content;
-    border: 1px solid #2d2d3d;
+    box-shadow: 0 0 20px rgba(22, 74, 245, 0.2);
 }
 
 .status{
     text-align: center;
-    padding: 10px;
+    padding: 12px;
     border-radius: 8px;
     font-weight: bold;
     margin-bottom: 15px;
 }
 
-.parceria{ background: rgba(0, 255, 255, 0.1); color: var(--secondary); border: 1px solid var(--secondary); }
+.parceria{ background: rgba(0, 255, 255, 0.1); color: #00ffff; border: 1px solid #00ffff; }
 .normal{ background: rgba(255, 44, 44, 0.1); color: #ff2c2c; border: 1px solid #ff2c2c; }
 
-/* --- RESUMO ALINHADO --- */
-.resumo{
-    background: rgba(0,0,0,0.5);
-    padding: 12px;
-    margin: 15px 0;
-    border-radius: 8px;
-    max-height: 300px;
-    overflow-y: auto;
-    font-family: 'Courier New', Courier, monospace;
+.qtd-box{
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
-
-.resumo-header {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr;
-    font-weight: bold;
-    border-bottom: 1px solid var(--primary);
-    padding-bottom: 5px;
-    margin-bottom: 5px;
-    font-size: 0.75rem;
-    color: var(--secondary);
-}
-
-.resumo-linha {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr;
-    font-size: 0.8rem;
-    margin-bottom: 4px;
-    border-bottom: 1px solid #222;
-}
-
-.resumo-linha span:nth-child(2) { text-align: center; }
-.resumo-linha span:nth-child(3) { text-align: right; }
-
-.total-info { display: flex; justify-content: space-between; margin: 8px 0; font-weight: bold; }
-.valor { color: #4eff4e; }
-
-/* BOTÕES */
-.qtd-box { display: flex; gap: 4px; align-items: center; }
 
 button{
-    padding: 6px 10px;
+    padding: 8px 12px;
     border: none;
     border-radius: 4px;
     background: var(--primary);
     color: white;
     cursor: pointer;
     font-weight: bold;
-    transition: 0.2s;
 }
 
 button:hover { filter: brightness(1.2); }
-button:active { transform: scale(0.9); }
-
-.btn-10 { background: #333; color: var(--secondary); font-size: 0.75rem; }
+button:active { transform: scale(0.95); }
 
 input[type="number"]{
-    width: 45px;
+    width: 55px;
     background: #000;
     border: 1px solid var(--primary);
     color: white;
     padding: 5px;
     text-align: center;
     border-radius: 4px;
-    font-size: 0.9rem;
 }
 
-.botoes-acao { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
+.resumo{
+    background: rgba(0,0,0,0.3);
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.resumo div{
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    margin-bottom: 5px;
+    border-bottom: 1px solid #333;
+}
+
+.total-info {
+    font-size: 1.1rem;
+    margin: 10px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.valor { color: #4eff4e; font-weight: bold; }
+
+.botoes-acao {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.btn-limpar { background: #661111; }
+
+@keyframes flash {
+    0% { box-shadow: 0 0 15px var(--secondary); }
+    100% { box-shadow: none; }
+}
+
+.flash { animation: flash 0.4s ease; }
 
 @media (max-width: 900px) {
     .container { flex-direction: column; }
     .calculadora { position: static; }
-    .itens { grid-template-columns: 1fr; }
 }
 </style>
 </head>
+
 <body>
 
 <h1>SISTEMA EGITO</h1>
@@ -181,24 +192,19 @@ input[type="number"]{
     <div class="calculadora">
         <div id="statusModo" class="status normal">🔴 MODO NORMAL</div>
         
-        <label style="cursor:pointer; display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 15px;">
-            <input type="checkbox" id="modoCheck" onchange="toggleModo()"> Tabela Parceria
+        <label style="cursor:pointer; display: block; text-align: center; margin-bottom: 15px;">
+            <input type="checkbox" id="modoCheck" onchange="toggleModo()"> Ativar Tabela Parceria
         </label>
 
-        <div class="resumo-header" id="resumoHeader" style="display:none;">
-            <span>ITEM</span>
-            <span style="text-align:center;">QTD</span>
-            <span style="text-align:right;">SUBTOTAL</span>
-        </div>
         <div class="resumo" id="resumo">Nenhum item selecionado</div>
 
         <div class="total-info">Total: <span id="total" class="valor">R$ 0,00</span></div>
-        <div class="total-info" style="color: #bbb; font-size: 0.85rem;">Vendedor (30%): <span id="vendedor">R$ 0,00</span></div>
-        <div class="total-info" style="color: #bbb; font-size: 0.85rem;">FAC (70%): <span id="empresa">R$ 0,00</span></div>
+        <div class="total-info" style="font-size: 0.9rem; opacity: 0.8;">Vendedor (30%): <span id="vendedor">R$ 0,00</span></div>
+        <div class="total-info" style="font-size: 0.9rem; opacity: 0.8;">FAC (70%): <span id="empresa">R$ 0,00</span></div>
 
         <div class="botoes-acao">
             <button onclick="copiar()">Copiar Orçamento</button>
-            <button style="background:#800;" onclick="limpar()">Limpar</button>
+            <button class="btn-limpar" onclick="limpar()">Limpar Tudo</button>
         </div>
     </div>
 </div>
@@ -206,6 +212,7 @@ input[type="number"]{
 <script>
 let modo = "normal";
 let selecionados = {};
+let intervalo = null;
 
 const produtos = {
     "Armamento Pesado": [
@@ -218,10 +225,8 @@ const produtos = {
         {nome: "Five 7", parceria: 116910, normal: 129900},
         {nome: "Micro Uzi", parceria: 93285, normal: 103650}
     ],
-    "Utilidades": [
-        {nome: "LSD", parceria: 600, normal: 750},
-        {nome: "Munição", parceria: 150, normal: 250},
-        {nome: "Colete", parceria: 5000, normal: 7500}
+    "Utilidades & Tráfico": [
+        {nome: "LSD", parceria: 600, normal: 750}
     ]
 };
 
@@ -233,19 +238,20 @@ for(let cat in produtos) {
 function render() {
     const c = document.getElementById("itens");
     c.innerHTML = "";
+
     for(let cat in produtos) {
         let html = `<div class="categoria"><h3>${cat}</h3>`;
         produtos[cat].forEach((p, i) => {
             const id = cat + i;
             const qtd = selecionados[id] || 0;
             html += `
-                <div class="item">
-                    <div style="font-size:0.85rem"><strong>${p.nome}</strong><br><span style="color:var(--secondary)">${formatar(p[modo])}</span></div>
+                <div class="item" id="box-${id}">
+                    <div style="max-width: 140px"><strong>${p.nome}</strong><br><small>${formatar(p[modo])}</small></div>
                     <div class="qtd-box">
-                        <button onclick="ajustar('${id}', -1)">-</button>
-                        <input type="number" id="${id}" value="${qtd}" oninput="manual('${id}')">
-                        <button onclick="ajustar('${id}', 1)">+</button>
-                        <button class="btn-10" onclick="ajustar('${id}', 10)">+10</button>
+                        <button onmousedown="startPress('${id}','menos')" ontouchstart="startPress('${id}','menos')" onmouseup="stopPress()" ontouchend="stopPress()">-</button>
+                        <input type="number" min="0" value="${qtd}" id="${id}" oninput="atualizarInput('${id}')">
+                        <button onmousedown="startPress('${id}','mais')" ontouchstart="startPress('${id}','mais')" onmouseup="stopPress()" ontouchend="stopPress()">+</button>
+                        <button onclick="aumentarDez('${id}')">+10</button>
                     </div>
                 </div>`;
         });
@@ -255,46 +261,67 @@ function render() {
     calcular();
 }
 
-function ajustar(id, val) {
-    const input = document.getElementById(id);
-    let n = (parseInt(input.value) || 0) + val;
-    input.value = n < 0 ? 0 : n;
-    manual(id);
+function startPress(id, tipo) {
+    executarAcao(id, tipo);
+    intervalo = setInterval(() => executarAcao(id, tipo), 120);
 }
 
-function manual(id) {
+function stopPress() { clearInterval(intervalo); }
+
+function executarAcao(id, tipo) {
+    const input = document.getElementById(id);
+    let val = parseInt(input.value) || 0;
+    input.value = tipo === "mais" ? val + 1 : Math.max(0, val - 1);
+    atualizarInput(id);
+}
+
+function aumentarDez(id) {
+    const input = document.getElementById(id);
+    input.value = (parseInt(input.value) || 0) + 10;
+    atualizarInput(id);
+}
+
+function atualizarInput(id) {
     selecionados[id] = parseInt(document.getElementById(id).value) || 0;
+    efeito(id);
     calcular();
 }
 
 function toggleModo() {
     modo = document.getElementById("modoCheck").checked ? "parceria" : "normal";
-    document.getElementById("statusModo").className = "status " + modo;
-    document.getElementById("statusModo").innerText = modo === "parceria" ? "🟢 MODO PARCERIA" : "🔴 MODO NORMAL";
+    const s = document.getElementById("statusModo");
+    s.className = modo === "parceria" ? "status parceria" : "status normal";
+    s.innerText = modo === "parceria" ? "🟢 MODO PARCERIA" : "🔴 MODO NORMAL";
     render();
 }
 
 function calcular() {
     let total = 0;
     let resumoHTML = "";
-    let temItem = false;
     
     for(let id in mapaProdutos) {
         const qtd = selecionados[id] || 0;
         if(qtd > 0) {
-            temItem = true;
             const p = mapaProdutos[id];
-            const sub = qtd * p[modo];
-            total += sub;
-            resumoHTML += `<div class="resumo-linha"><span>${p.nome}</span><span>x${qtd}</span><span>${formatar(sub)}</span></div>`;
+            const subtotal = qtd * p[modo];
+            total += subtotal;
+            resumoHTML += `<div><span>${p.nome} (x${qtd})</span> <span>${formatar(subtotal)}</span></div>`;
         }
     }
 
-    document.getElementById("resumoHeader").style.display = temItem ? "grid" : "none";
     document.getElementById("resumo").innerHTML = resumoHTML || "Nenhum item selecionado";
     document.getElementById("total").innerText = formatar(total);
     document.getElementById("vendedor").innerText = formatar(total * 0.3);
     document.getElementById("empresa").innerText = formatar(total * 0.7);
+    localStorage.setItem("dados_egito", JSON.stringify(selecionados));
+}
+
+function efeito(id) {
+    const box = document.getElementById("box-" + id);
+    if(box) {
+        box.classList.add("flash");
+        setTimeout(() => box.classList.remove("flash"), 400);
+    }
 }
 
 function copiar() {
@@ -307,7 +334,6 @@ function copiar() {
         if(selecionados[id] > 0) {
             flag = true;
             const p = mapaProdutos[id];
-            // Alinhamento via código
             const nome = p.nome.padEnd(15, " ");
             const qtd = selecionados[id].toString().padStart(3, " ");
             const sub = formatar(selecionados[id] * p[modo]).padStart(12, " ");
@@ -318,25 +344,26 @@ function copiar() {
     if(!flag) return alert("Adicione itens!");
 
     texto += "--------------------------------\n";
-    texto += `TOTAL GERAL: ${document.getElementById("total").innerText}\n`;
+    texto += `TOTAL: ${document.getElementById("total").innerText}\n`;
+    texto += `VENDEDOR: ${document.getElementById("vendedor").innerText}\n`;
     texto += "═══ EGITO ARSENAL ═══";
 
     navigator.clipboard.writeText(texto);
-    alert("Orçamento copiado para o WhatsApp!");
+    alert("Orçamento copiado com sucesso!");
 }
 
 function limpar() {
-    if(confirm("Deseja limpar todo o orçamento?")) {
-        selecionados = {};
-        render();
-    }
+    selecionados = {};
+    render();
 }
 
 function formatar(v) {
     return v.toLocaleString("pt-BR", {style: "currency", currency: "BRL"});
 }
-
-window.onload = render;
+window.onload = () => {
+    selecionados = JSON.parse(localStorage.getItem("dados_egito")) || {};
+    render();
+};
 </script>
 
 </body>
