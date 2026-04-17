@@ -43,8 +43,8 @@ h1{
 .itens{
     flex: 2;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 15px;
 }
 
 .categoria{
@@ -52,6 +52,7 @@ h1{
     padding: 15px;
     border-radius: 12px;
     border: 1px solid #2d2d3d;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
 .categoria h3 {
@@ -59,6 +60,7 @@ h1{
     border-left: 4px solid var(--primary);
     padding-left: 10px;
     color: var(--secondary);
+    font-size: 1rem;
 }
 
 .item{
@@ -66,9 +68,10 @@ h1{
     justify-content: space-between;
     align-items: center;
     background: var(--bg-item);
-    padding: 10px;
+    padding: 12px;
     margin: 8px 0;
     border-radius: 8px;
+    border: 1px solid transparent;
 }
 
 .calculadora{
@@ -93,15 +96,15 @@ h1{
 .parceria{ background: rgba(0, 255, 255, 0.1); color: var(--secondary); border: 1px solid var(--secondary); }
 .normal{ background: rgba(255, 44, 44, 0.1); color: #ff2c2c; border: 1px solid #ff2c2c; }
 
-/* --- ESTILO DO RESUMO ALINHADO --- */
+/* --- RESUMO ALINHADO --- */
 .resumo{
-    background: rgba(0,0,0,0.4);
+    background: rgba(0,0,0,0.5);
     padding: 12px;
     margin: 15px 0;
     border-radius: 8px;
     max-height: 300px;
     overflow-y: auto;
-    font-family: 'Courier New', Courier, monospace; /* Fonte mono para garantir alinhamento */
+    font-family: 'Courier New', Courier, monospace;
 }
 
 .resumo-header {
@@ -111,16 +114,16 @@ h1{
     border-bottom: 1px solid var(--primary);
     padding-bottom: 5px;
     margin-bottom: 5px;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--secondary);
 }
 
 .resumo-linha {
     display: grid;
-    grid-template-columns: 2fr 1fr 1.5fr; /* Nome | Qtd | Valor */
+    grid-template-columns: 2fr 1fr 1.5fr;
     font-size: 0.8rem;
-    margin-bottom: 3px;
-    border-bottom: 1px solid #333;
+    margin-bottom: 4px;
+    border-bottom: 1px solid #222;
 }
 
 .resumo-linha span:nth-child(2) { text-align: center; }
@@ -129,13 +132,34 @@ h1{
 .total-info { display: flex; justify-content: space-between; margin: 8px 0; font-weight: bold; }
 .valor { color: #4eff4e; }
 
+/* BOTÕES */
+.qtd-box { display: flex; gap: 4px; align-items: center; }
+
 button{
-    padding: 8px 12px;
+    padding: 6px 10px;
     border: none;
     border-radius: 4px;
     background: var(--primary);
     color: white;
     cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+}
+
+button:hover { filter: brightness(1.2); }
+button:active { transform: scale(0.9); }
+
+.btn-10 { background: #333; color: var(--secondary); font-size: 0.75rem; }
+
+input[type="number"]{
+    width: 45px;
+    background: #000;
+    border: 1px solid var(--primary);
+    color: white;
+    padding: 5px;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 0.9rem;
 }
 
 .botoes-acao { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 15px; }
@@ -143,6 +167,7 @@ button{
 @media (max-width: 900px) {
     .container { flex-direction: column; }
     .calculadora { position: static; }
+    .itens { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -194,7 +219,9 @@ const produtos = {
         {nome: "Micro Uzi", parceria: 93285, normal: 103650}
     ],
     "Utilidades": [
-        {nome: "LSD", parceria: 600, normal: 750}
+        {nome: "LSD", parceria: 600, normal: 750},
+        {nome: "Munição", parceria: 150, normal: 250},
+        {nome: "Colete", parceria: 5000, normal: 7500}
     ]
 };
 
@@ -213,11 +240,12 @@ function render() {
             const qtd = selecionados[id] || 0;
             html += `
                 <div class="item">
-                    <div style="font-size:0.9rem"><strong>${p.nome}</strong><br>${formatar(p[modo])}</div>
-                    <div style="display:flex; gap:5px; align-items:center;">
+                    <div style="font-size:0.85rem"><strong>${p.nome}</strong><br><span style="color:var(--secondary)">${formatar(p[modo])}</span></div>
+                    <div class="qtd-box">
                         <button onclick="ajustar('${id}', -1)">-</button>
-                        <input type="number" id="${id}" value="${qtd}" oninput="manual('${id}')" style="width:50px; text-align:center; background:#000; color:#fff; border:1px solid var(--primary);">
+                        <input type="number" id="${id}" value="${qtd}" oninput="manual('${id}')">
                         <button onclick="ajustar('${id}', 1)">+</button>
+                        <button class="btn-10" onclick="ajustar('${id}', 10)">+10</button>
                     </div>
                 </div>`;
         });
@@ -279,6 +307,7 @@ function copiar() {
         if(selecionados[id] > 0) {
             flag = true;
             const p = mapaProdutos[id];
+            // Alinhamento via código
             const nome = p.nome.padEnd(15, " ");
             const qtd = selecionados[id].toString().padStart(3, " ");
             const sub = formatar(selecionados[id] * p[modo]).padStart(12, " ");
@@ -289,17 +318,18 @@ function copiar() {
     if(!flag) return alert("Adicione itens!");
 
     texto += "--------------------------------\n";
-    texto += `TOTAL: ${document.getElementById("total").innerText}\n`;
-    texto += `VENDEDOR: ${document.getElementById("vendedor").innerText}\n`;
+    texto += `TOTAL GERAL: ${document.getElementById("total").innerText}\n`;
     texto += "═══ EGITO ARSENAL ═══";
 
     navigator.clipboard.writeText(texto);
-    alert("Orçamento copiado com sucesso!");
+    alert("Orçamento copiado para o WhatsApp!");
 }
 
 function limpar() {
-    selecionados = {};
-    render();
+    if(confirm("Deseja limpar todo o orçamento?")) {
+        selecionados = {};
+        render();
+    }
 }
 
 function formatar(v) {
