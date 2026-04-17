@@ -190,7 +190,7 @@ input[type="number"]{
 
 <body>
 
-<h1>SISTEMA EGITO</h1>
+<h1>ORÇAMENTO EGITO</h1>
 
 <div class="container">
     <div class="itens" id="itens"></div>
@@ -269,7 +269,7 @@ function render() {
 
 function startPress(id, tipo) {
     executarAcao(id, tipo);
-    intervalo = setInterval(() => executarAcao(id, tipo), 180);
+    intervalo = setInterval(() => executarAcao(id, tipo), 200);
 }
 
 function stopPress() { clearInterval(intervalo); }
@@ -297,7 +297,7 @@ function toggleModo() {
     modo = document.getElementById("modoCheck").checked ? "parceria" : "normal";
     const s = document.getElementById("statusModo");
     s.className = modo === "parceria" ? "status parceria" : "status normal";
-    s.innerText = modo === "parceria" ? "🟢 MODO PARCERIA" : "🔴 MODO NORMAL";
+    s.innerText = modo === "parceria" ? "🟢  MODO PARCERIA" : "🔴  MODO NORMAL";
     render();
 }
 
@@ -331,7 +331,7 @@ function efeito(id) {
 }
 
 function copiar() {
-    let texto = "═══ 💸 ORÇAMENTO EGITO 💸 ═══\n";
+    let texto = "═══ 💸 Vendas 💸 ═══\n";
     texto += "ITEM            | QTD | SUBTOTAL\n";
     texto += "--------------------------------\n";
     
