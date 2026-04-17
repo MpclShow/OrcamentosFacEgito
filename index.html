@@ -478,11 +478,6 @@ modo=localStorage.getItem("modo")||"normal";
 selecionados=JSON.parse(localStorage.getItem("dados"))||{};
 }
 
-window.addEventListener("beforeunload", () => {
-  localStorage.removeItem("dados");
-  localStorage.removeItem("modo");
-});
-
 window.onload=()=>{
 carregar();
 document.getElementById("modoCheck").checked=modo==="parceria";
