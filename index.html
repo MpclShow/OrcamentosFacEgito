@@ -192,6 +192,25 @@ input[type="number"]{
     font-size:18px;
 }
 
+.botoes {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
+
+.botoes button {
+    flex: 1;
+}
+
+.total {
+    margin-bottom: 10px;
+}
+
+/* botão limpar em vermelho */
+.botoes button:last-child {
+    background: #aa0000;
+}
+
 }
 </style>
 </head>
@@ -218,8 +237,10 @@ input[type="number"]{
 <div class="total">Vendedor: <span id="vendedor"></span></div>
 <div class="total">FAC: <span id="empresa"></span></div>
 
-<button onclick="copiar()">Copiar</button>
-<button onclick="limpar()">Limpar</button>
+<div class="botoes">
+  <button onclick="copiar()">Copiar</button>
+  <button onclick="limpar()">Limpar</button>
+</div>
 
 </div>
 
@@ -418,16 +439,20 @@ function copiar(){
 let texto="ORÇAMENTO EGITO\n\n";
 
 for(let id in selecionados){
-const p = mapaProdutos[id];
-const qtd = selecionados[id];
-const valor = qtd*p[modo];
+    const p = mapaProdutos[id];
+    const qtd = selecionados[id];
+    const valor = qtd*p[modo];
 
-texto += `${p.nome} - x ${qtd} = ${formatar(valor)}\n`;
+    const nome = p.nome.padEnd(18, " ");
+    const quantidade = (`x ${qtd}`).padEnd(8, " ");
+    const preco = formatar(valor).padStart(15, " ");
+
+    texto += `${nome}${quantidade}= ${preco}\n`;
 }
 
-texto += `\n====================\n`;
-texto += `Total: ${document.getElementById("total").innerText}\n`;
-texto += `Vendedor: ${document.getElementById("vendedor").innerText}\n`;
+texto += `\n====================\n\n`;
+texto += `Total: ${document.getElementById("total").innerText}\n\n`;
+texto += `Vendedor: ${document.getElementById("vendedor").innerText}\n\n`;
 texto += `FAC: ${document.getElementById("empresa").innerText}\n`;
 
 navigator.clipboard.writeText(texto);
